@@ -1,6 +1,6 @@
 import Logo from '../../public/assets/1.png';
 
-function Header() {
+function Header({setView}) {
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-black">
@@ -44,10 +44,10 @@ function Header() {
         <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
           <ul className="navbar-nav mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active text-white mx-2 fs-5" aria-current="page" href="#order-food">Menu</a>
+              <a onClick={()=> setView('menu')} className="nav-link active text-white mx-2 fs-5" aria-current="page" href="#menu">Menu</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link active text-white mx-2 fs-5" aria-current="page" href="#order-food">Customer</a>
+              <a onClick={()=> setView('customer')} className="nav-link active text-white mx-2 fs-5" aria-current="page" href="#customer">Customer</a>
             </li>
             <li className="nav-item">
               <a className="nav-link active text-white mx-2 fs-5" aria-current="page" href="#">Promotion</a>
@@ -64,12 +64,12 @@ function Header() {
           </ul>
 
           {/* Tombol Cart */}
-          <button className="btn btn-outline-light position-relative d-flex align-items-center" style={{ padding: '5px 15px', borderRadius: '30px' }}>
+          <a href='#order' onClick={()=> setView('order')} className="btn btn-outline-light position-relative d-flex align-items-center" style={{ padding: '5px 15px', borderRadius: '30px' }}>
             <span style={{ marginRight: '10px', fontSize: '20px' }}>
-              <i className="fas fa-shopping-cart"></i>
+              <span className="fas fa-shopping-cart white-icon"></span>
             </span>
-            Cart
-          </button>
+            Order
+          </a>
         </div>
 
         {/* Nama Aplikasi untuk layar besar */}

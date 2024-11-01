@@ -1,7 +1,7 @@
 function Table({ foods, handleDeleteFood, handleEditFood  }) {
     return (
         <>
-            <div className="d-flex flex-column align-items-center" style={{marginTop:'100px'}}>
+            <div className="d-flex flex-column align-items-center" style={{marginTop:'80px'}}>
                 <div style={{ width: "90%", maxWidth: "1200px" }}>
                     <h1 className="text-center mb-4">List of Foods</h1>
                     <div className="table-responsive">
