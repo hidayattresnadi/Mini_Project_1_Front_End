@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-const Form = ({ saveFood, categories }) => {
+const Form = ({ addFood, editFood, categories, editingFood, isFormFoodOpen, setIsFormFoodOpen }) => {
     const [formData, setFormData] = useState({
         name: '',
         price: '',
@@ -8,6 +8,35 @@ const Form = ({ saveFood, categories }) => {
         rating: '',
         isAvailable: ''
     });
+
+    const nameInputRef = useRef(null);
+
+    useEffect(() => {
+        if (isFormFoodOpen && nameInputRef.current) {
+            nameInputRef.current.focus();
+        }
+    }, [isFormFoodOpen]); 
+
+    useEffect(() => {
+        if (editingFood) {
+            setFormData({
+                name: editingFood.name,
+                price: editingFood.price,
+                category: editingFood.category,
+                rating: editingFood.rating,
+                isAvailable: editingFood.isAvailable
+            });
+        }
+        else {
+            setFormData({
+                name: '',
+                price: '',
+                category: '',
+                rating: '',
+                isAvailable: ''
+            });
+        }
+    }, [editingFood]);
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
@@ -19,7 +48,13 @@ const Form = ({ saveFood, categories }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        saveFood(formData);
+        if (editingFood) {
+            editFood(formData);
+        }
+        else {
+            addFood(formData);
+        }
+
         setFormData({
             name: '',
             price: '',
@@ -27,18 +62,25 @@ const Form = ({ saveFood, categories }) => {
             rating: '',
             isAvailable: ''
         });
+
+        setIsFormFoodOpen(false);
     };
+
+    const openFoodForm = () => {
+        setIsFormFoodOpen(true);
+    };
+
     return (
         <div className="d-flex flex-column align-items-center" style={{ marginTop: '80px' }}>
             <div className="card" style={{ width: "90%", maxWidth: "600px" }}>
                 <div className="card-header bg-dark text-white text-center">
-                    <h1 className="mb-0">Form to Add Food</h1>
+                    <h1 className="mb-0">{editingFood ? 'Form to Edit Food' : 'Form to Add Food'}</h1>
                 </div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label htmlFor="name" className="form-label">Name</label>
-                            <input required minLength={2} maxLength={100} type="text" className="form-control" id="name" aria-describedby="nameHelp" onChange={handleInputChange} value={formData.name} />
+                            <input ref={nameInputRef} required minLength={2} maxLength={100} type="text" className="form-control" id="name" aria-describedby="nameHelp" onChange={handleInputChange} value={formData.name} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="price" className="form-label">Price</label>
@@ -67,7 +109,7 @@ const Form = ({ saveFood, categories }) => {
                             />
                             <label className="form-check-label" htmlFor="isAvailable">Is Available</label>
                         </div>
-                        <button type="submit" className="btn btn-primary mt-3 w-100">Submit</button>
+                        <button onClick={openFoodForm} type="submit" className="btn btn-primary mt-3 w-100">Submit</button>
                     </form>
                 </div>
             </div>

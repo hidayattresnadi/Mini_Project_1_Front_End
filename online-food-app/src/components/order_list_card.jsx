@@ -1,13 +1,12 @@
-
-function OrderList({ orders }) {
+function OrderList({ orders, getOrderStatus }) {
     let rupiah = Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
     });
-    
+
     return (
         <>
-            <div className="container" style={{marginTop:'120px'}}>
+            <div className="container" style={{ marginTop: '120px' }}>
                 {orders.length > 0 ? <h1 className="text-center">List Of Orders</h1> : ''}
                 <div className="row mt-5">
                     {orders.map((order, index) => (
@@ -32,10 +31,15 @@ function OrderList({ orders }) {
                                     </ul>
                                 </div>
                                 <div className="card-footer text-end">
+                                    <p className="fw-bold">Status: {order.status}</p>
                                     <p className="fw-bold">Total Price: {rupiah.format(order.totalPrice)}</p>
-                                    {/* <a href="#" className="btn btn-outline-primary w-100">
-                                        View Details
-                                    </a> */}
+                                    {!["Cancelled", "Delivered"].includes(order.status) ? 
+                                    <a
+                                    onClick={() => getOrderStatus(index)}
+                                    className={`btn btn-outline-primary w-100`}
+                                >
+                                    Change Order Status
+                                </a> : ''}
                                 </div>
                             </div>
                         </div>

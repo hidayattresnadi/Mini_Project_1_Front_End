@@ -1,4 +1,4 @@
-function Table({ foods  }) {
+function Table({ foods, handleDeleteFood, handleEditFood  }) {
     return (
         <>
             <div className="d-flex flex-column align-items-center" style={{marginTop:'100px'}}>
@@ -13,6 +13,8 @@ function Table({ foods  }) {
                                     <th>Category</th>
                                     <th>Rating</th>
                                     <th>Is Available</th>
+                                    <th>Edit Food</th>
+                                    <th>Delete Food</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -23,6 +25,8 @@ function Table({ foods  }) {
                                         <td>{food.category}</td>
                                         <td>{food.rating}</td>
                                         <td>{food.isAvailable ? 'Available' : 'Not Available'}</td>
+                                        <td><button onClick={() => handleEditFood(index) } className="btn btn-primary"><i className="fas fa-pencil-alt"></i></button></td>
+                                        <td><button onClick={() => handleDeleteFood(index) } className="btn btn-danger"> <i className="fas fa-trash-alt"></i></button></td>
                                     </tr>
                                 ))}
                             </tbody>

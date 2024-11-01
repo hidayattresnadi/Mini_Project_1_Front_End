@@ -1,12 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { errorSwal } from "../helper";
 
-const CustomerForm = ({ saveCustomer }) => {
+const CustomerForm = ({ addCustomer, editCustomer, editingCustomer, isFormOpen, setIsFormOpen }) => {
     const [formData, setFormData] = useState({
-        name: '',
+        customerName: '',
         email: '',
         phoneNumber: '',
         address: ''
     });
+
+    
+    const nameInputRef = useRef(null);
+
+    useEffect(() => {
+        if (editingCustomer) {
+            setFormData({
+                customerName: editingCustomer.customerName,
+                email: editingCustomer.email,
+                phoneNumber: editingCustomer.phoneNumber,
+                address: editingCustomer.address,
+            });
+        }
+        else {
+            setFormData({
+                customerName: '',
+                email: '',
+                phoneNumber: '',
+                address: ''
+            });
+        }
+    }, [editingCustomer]);
+
+    useEffect(() => {
+        if (isFormOpen && nameInputRef.current) {
+            nameInputRef.current.focus();
+        }
+    }, [isFormOpen]); 
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
@@ -19,28 +48,39 @@ const CustomerForm = ({ saveCustomer }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if(formData.phoneNumber.length < 10 || formData.phoneNumber.length >15) {
-            alert('Phone Number is not valid')
+            errorSwal('Phone Number is not valid')
             return;
         }
-        saveCustomer(formData);
+        if(editingCustomer){
+            editCustomer(formData);
+        }
+        else {
+            addCustomer(formData);
+        }
         setFormData({
-            name: '',
+            customerName: '',
             email: '',
             phoneNumber: '',
             address: ''
         });
+        setIsFormOpen(false);
     };
+
+    const openForm = () => {
+        setIsFormOpen(true);
+    };
+
     return (
         <div className="d-flex flex-column align-items-center" style={{ marginTop: '80px' }}>
             <div className="card" style={{ width: "90%", maxWidth: "600px" }}>
                 <div className="card-header bg-dark text-white text-center">
-                    <h1 className="mb-0">Form to Add Customer</h1>
+                    <h1 className="mb-0">{editingCustomer ? 'Form to Edit Customer' : 'Form to Add Customer'}</h1>
                 </div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
-                            <label htmlFor="name" className="form-label">Name</label>
-                            <input required minLength={2} maxLength={100} type="text" className="form-control" id="name" aria-describedby="nameHelp" onChange={handleInputChange} value={formData.name} />
+                            <label htmlFor="customerName" className="form-label">Name</label>
+                            <input ref={nameInputRef} required minLength={2} maxLength={100} type="text" className="form-control" id="customerName" aria-describedby="nameHelp" onChange={handleInputChange} value={formData.customerName} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">Email</label>
@@ -54,7 +94,7 @@ const CustomerForm = ({ saveCustomer }) => {
                             <label htmlFor="address" className="form-label">Address</label>
                             <input maxLength={200} type="text" className="form-control" id="address" onChange={handleInputChange} value={formData.address} />
                         </div>
-                        <button type="submit" className="btn btn-primary mt-3 w-100">Submit</button>
+                        <button onClick={openForm} type="submit" className="btn btn-primary mt-3 w-100">Submit</button>
                     </form>
                 </div>
             </div>

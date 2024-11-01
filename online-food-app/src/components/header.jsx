@@ -47,6 +47,9 @@ function Header() {
               <a className="nav-link active text-white mx-2 fs-5" aria-current="page" href="#order-food">Menu</a>
             </li>
             <li className="nav-item">
+              <a className="nav-link active text-white mx-2 fs-5" aria-current="page" href="#order-food">Customer</a>
+            </li>
+            <li className="nav-item">
               <a className="nav-link active text-white mx-2 fs-5" aria-current="page" href="#">Promotion</a>
             </li>
             <li className="nav-item">
